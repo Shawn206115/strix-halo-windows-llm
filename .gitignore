@@ -1,0 +1,9 @@
+﻿# local secrets / keys
+.publish_creds/
+.publish_creds
+*.pem
+*.key
+
+# OS junk
+Thumbs.db
+desktop.ini
