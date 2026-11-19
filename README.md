@@ -15,6 +15,12 @@
 >   issue #1 (we reproduced it on two partitions);
 > - a three-step quickstart with a single `.cmd`, for people who just want it to load.
 >
+> One adjacent Chinese write-up is worth knowing:
+> [MSHAVL, "Strix Halo 本地部署 Qwen3.8 Flash Next"](https://lcz.me/topic/1453/2) (2026-09-01).
+> Its subject is **prefill/decode tuning** (`-lm dio` vs `mmap`, MTP draft depth, thread split),
+> not the load failure — but it hits the same Windows mechanism in passing and gives a concrete
+> pagefile number (`32768 → 98304 MB`) as a prerequisite. Same wall, different door.
+>
 > The underlying mechanism is AMD/Microsoft behaviour, not anyone's discovery. AMD already
 > documents pagefile sizing for large carveouts.
 
