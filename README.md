@@ -1,8 +1,22 @@
 # Running large local LLMs on Windows with a 96 GB VRAM carveout (Strix Halo / Ryzen AI Max+ 395)
 
-**The problem nobody explains:** on a 128 GB Strix Halo machine you can carve out 96 GB of VRAM, and still fail to load a 87 GB model — because Windows' *commit limit* (RAM + pagefile) is smaller than the model. Carve out less (GTT-only, ~60 GB) and you can't use the 96 GB at all. This repo is the practical guide we wish we had.
+**The problem:** on a 128 GB Strix Halo machine you can carve out 96 GB of VRAM, and still fail to load an 87 GB model — because Windows' *commit limit* (RAM + pagefile) is smaller than the model. Carve out less (GTT-only, ~60 GB) and you can't use the 96 GB at all. This repo is a short, copy-paste-able procedure for that, plus measurements on 2026 models.
 
-We did not invent the underlying trick (AMD documents pagefile sizing for large carveouts). We wrote down the complete, verified-for-Windows procedure, the numbers, and the traps — because we could not find such a guide when we started.
+> **Prior work — read this first.** We independently hit and solved this, and later found that
+> [rahulrevolution06-design/strix-halo-windows-memory-fix](https://github.com/rahulrevolution06-design/strix-halo-windows-memory-fix)
+> documented the same mechanism in August 2026, with a more formal analysis: the commit-ratio
+> measurement (`k ≈ 1.02`), a sizing model, a forecast tool, and a fully reversible PowerShell
+> implementation. **If you want the deep treatment, go there.** What this repo adds:
+>
+> - measurements on newer models (Qwen3.8-Flash-Next 87 GB, Ornith-1.5 122B) including MTP;
+> - **three models resident at once** (commit 109.8 GB);
+> - full-GPU-offload vs partial-offload throughput on the same model (4.5×);
+> - an independent second report of the secondary-volume pagefile defect they list as open
+>   issue #1 (we reproduced it on two partitions);
+> - a three-step quickstart with a single `.cmd`, for people who just want it to load.
+>
+> The underlying mechanism is AMD/Microsoft behaviour, not anyone's discovery. AMD already
+> documents pagefile sizing for large carveouts.
 
 ---
 
