@@ -34,7 +34,7 @@
 | OS | Windows 11 Home, build 26200 |
 | Driver | AMD 32.0.32015.16001 (2026-11-11) |
 | BIOS UMA / VRAM carveout | **96 GB** |
-| Addressable GPU memory | 96 GB dedicated + 16 GB shared = **112 GB** |
+| Addressable GPU memory | 96 GB dedicated + 16 GB shared = **112 GB** (peak observed: 105.6 GB with a 101.79 GB model) |
 | Physical RAM visible to Windows | 31.6 GB |
 | Pagefile | **112 GB fixed on C:** |
 | **Commit limit** | **143.6 GB** |
@@ -152,7 +152,7 @@ With `--mmproj`, the 87 GB model read a generated 4-line test card (mixed Chines
 
 ## 5. How far Windows can go
 
-- **Theoretical ceiling here: ~112 GB of addressable GPU memory** (96 dedicated + 16 shared). We are testing whether a ~109 GB model loads; this section will be updated with the result.
+- **Ceiling here: ~112 GB of addressable GPU memory** (96 dedicated + 16 shared) — **now verified, not theoretical.** Ornith-1.5-122B `Q6_K` (101.79 GB, 3 shards) loads in 60 s and decodes at **18.3 tok/s**; peak allocation was **95.3 GB dedicated + 10.3 GB shared = 105.6 GB**, inside the 112 GB ceiling. Details: [`docs/ornith-122b-q5k-96gb.md`](docs/ornith-122b-q5k-96gb.md).
 - Commit limit can be pushed further (e.g. 128 GB pagefile → 159.6 GB commit), but VRAM does not grow with it.
 - Linux still wins on flexibility (no commit limit, larger GTT, mmap), but both are limited by the same ~120 GB/s LPDDR5X bandwidth: 100 GB-class models decode in the tens of tok/s on either OS.
 
